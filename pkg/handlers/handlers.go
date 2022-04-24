@@ -41,3 +41,53 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 
 	renders.RenderTemplate(w, "about.page.tmpl", &models.TemplateData{StringMap: StringMap})
 }
+
+func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
+	StringMap := make(map[string]string)
+	StringMap["test"] = "heeey :)"
+
+	remoteIP := m.App.Session.GetString(r.Context(), "remote_ip")
+	StringMap["remote_ip"] = remoteIP
+
+	renders.RenderTemplate(w, "contact.page.tmpl", &models.TemplateData{StringMap: StringMap})
+}
+
+func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
+	StringMap := make(map[string]string)
+	StringMap["test"] = "heeey :)"
+
+	remoteIP := m.App.Session.GetString(r.Context(), "remote_ip")
+	StringMap["remote_ip"] = remoteIP
+
+	renders.RenderTemplate(w, "make-reservation.page.tmpl", &models.TemplateData{StringMap: StringMap})
+}
+
+func (m *Repository) SearchAvailability(w http.ResponseWriter, r *http.Request) {
+	StringMap := make(map[string]string)
+	StringMap["test"] = "heeey :)"
+
+	remoteIP := m.App.Session.GetString(r.Context(), "remote_ip")
+	StringMap["remote_ip"] = remoteIP
+
+	renders.RenderTemplate(w, "search-availability.page.tmpl", &models.TemplateData{StringMap: StringMap})
+}
+
+func (m *Repository) GeneralsQuarters(w http.ResponseWriter, r *http.Request) {
+	StringMap := make(map[string]string)
+	StringMap["test"] = "heeey :)"
+
+	remoteIP := m.App.Session.GetString(r.Context(), "remote_ip")
+	StringMap["remote_ip"] = remoteIP
+
+	renders.RenderTemplate(w, "generals.page.tmpl", &models.TemplateData{StringMap: StringMap})
+}
+
+func (m *Repository) MajorsSuite(w http.ResponseWriter, r *http.Request) {
+	StringMap := make(map[string]string)
+	StringMap["test"] = "heeey :)"
+
+	remoteIP := m.App.Session.GetString(r.Context(), "remote_ip")
+	StringMap["remote_ip"] = remoteIP
+
+	renders.RenderTemplate(w, "majors.page.tmpl", &models.TemplateData{StringMap: StringMap})
+}
