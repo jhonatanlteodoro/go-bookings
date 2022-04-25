@@ -10,7 +10,7 @@ import (
 func WriteToConsole(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Hit the page")
-		// fmt.Println(r.RequestURI)
+		fmt.Printf("\nURI: %s METHOD: %s", r.RequestURI, r.Method)
 		// r.Header
 		next.ServeHTTP(w, r)
 	})
