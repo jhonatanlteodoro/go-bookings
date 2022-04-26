@@ -20,7 +20,28 @@ var app config.AppConfig
 var session *scs.SessionManager
 
 func main() {
+	err := run()
+	if err != nil {
+		log.Fatal(err)
+	}
+	repo := handlers.NewRepo(&app)
+	handlers.NewHanlders(repo)
+	renders.NewTemplates(&app)
 
+	srv := &http.Server{
+		Addr:    portNamber,
+		Handler: routes(&app),
+	}
+
+	fmt.Println(fmt.Sprintf("Starting application on port %s", portNamber))
+	// http.ListenAndServe(portNamber, nil)
+	err = srv.ListenAndServe()
+	if err != nil {
+		log.Fatal("Fail attempting start server.")
+	}
+}
+
+func run() error {
 	// what am I going to put in the session
 	gob.Register(models.Reservation{})
 
@@ -38,23 +59,10 @@ func main() {
 	tc, err := renders.CreateTemplateCache()
 	if err != nil {
 		log.Fatal("Cannot create template cache")
+		return err
 	}
 	app.TemplateCache = tc
 	app.UseCache = false
 
-	repo := handlers.NewRepo(&app)
-	handlers.NewHanlders(repo)
-	renders.NewTemplates(&app)
-
-	srv := &http.Server{
-		Addr:    portNamber,
-		Handler: routes(&app),
-	}
-
-	fmt.Println(fmt.Sprintf("Starting application on port %s", portNamber))
-	// http.ListenAndServe(portNamber, nil)
-	err = srv.ListenAndServe()
-	if err != nil {
-		log.Fatal("Fail attempting start server.")
-	}
+	return nil
 }
