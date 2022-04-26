@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"testing"
 )
 
@@ -26,6 +26,22 @@ var theTests = []struct {
 	{"search-availability", "/search-availability", "GET", []postData{}, http.StatusOK},
 	{"contact", "/contact", "GET", []postData{}, http.StatusOK},
 	{"make-res", "/make-reservation", "GET", []postData{}, http.StatusOK},
+
+	{"post-search-avail", "/search-availability", "POST", []postData{
+		{key: "start", value: "2022-04-27"},
+		{key: "end", value: "2022-04-30"},
+	}, http.StatusOK},
+	{"post-search-avail-json", "/search-availability-json", "POST", []postData{
+		{key: "start", value: "2022-04-27"},
+		{key: "end", value: "2022-04-30"},
+	}, http.StatusOK},
+	{"make-reservation", "/make-reservation", "POST", []postData{
+		// {key: "csrf_token", value: nosurf.Token()}
+		{key: "first_name", value: "Jhonatan"},
+		{key: "last_name", value: "Teodoro"},
+		{key: "email", value: "dasdas@dasda.com"},
+		{key: "phone", value: "352236235"},
+	}, http.StatusOK},
 }
 
 func TestHandlers(t *testing.T) {
@@ -50,7 +66,25 @@ func TestHandlers(t *testing.T) {
 			}
 
 		} else {
-			fmt.Println("Hey ")
+			// fmt.Println("Hey ")
+			params := url.Values{}
+			for _, item := range test.params {
+				params.Add(item.key, item.value)
+			}
+			// client := ts.Client()
+			resp, err := ts.Client().PostForm(ts.URL+test.url, params)
+			if err != nil {
+				t.Log(err)
+				t.Error(err)
+			}
+
+			if resp.StatusCode != test.expectedStatusCode {
+				t.Errorf(
+					"For %s. expected %d but got %d",
+					test.name, test.expectedStatusCode, resp.StatusCode,
+				)
+			}
+
 		}
 	}
 }
